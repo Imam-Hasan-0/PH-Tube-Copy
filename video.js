@@ -6,6 +6,22 @@ const loadCategories = () => {
         .catch((error) => console.log(error))
 };
 
+// display categories
+const displayCategories = (categories) => {
+    const categoryContainer = document.getElementById("categories")
+
+    categories.forEach((item) => {
+        // create a button
+        const buttonContainer = document.createElement("div");
+        buttonContainer.innerHTML = `
+        <button id="btn-${item.category_id}" onclick="loadCategoriesVideos(${item.category_id})" class="btn category-btn" >${item.category}</button>
+        `
+
+        // add button to category container
+        categoryContainer.append(buttonContainer);
+    });
+}
+
 // remove active class function
 const removeActiveClass = () => {
     const buttons = document.getElementsByClassName("category-btn")
@@ -14,26 +30,13 @@ const removeActiveClass = () => {
     }
 }
 
-// load details
-const loadDetails = async (videoId) => {
-    console.log(videoId);
-    const uri = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`
-    const res = await fetch(uri)
-    const data = await res.json()
-    displayDetails(data.video)
-}
-
-// display details
-const displayDetails = (video) => {
-console.log(video);
-    const detailContainer = document.getElementById("modal-content")
-
-    detailContainer.innerHTML = `
-        <img src=${video.thumbnail} />
-        <p class="pt-3">${video.description}</p>
-    `
-    document.getElementById("showModalData").click()
-}
+// load videos
+const loadVideos = (searchText = "") => {
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
+        .then((res) => res.json())
+        .then((data) => displayVideos(data.videos))
+        .catch((error) => console.log(error))
+};
 
 // video category load
 const loadCategoriesVideos = (id) => {
@@ -51,39 +54,6 @@ const loadCategoriesVideos = (id) => {
         .catch((error) => console.log(error))
 }
 
-// display categories
-const displayCategories = (categories) => {
-    const categoryContainer = document.getElementById("categories")
-
-    categories.forEach((item) => {
-        console.log(item);
-        // create a button
-        const buttonContainer = document.createElement("div");
-        buttonContainer.innerHTML = `
-        <button id="btn-${item.category_id}" onclick="loadCategoriesVideos(${item.category_id})" class="btn category-btn" >${item.category}</button>
-        `
-
-        // add button to category container
-        categoryContainer.append(buttonContainer);
-    });
-}
-
-// time string setup
-function getTimeString(time) {
-    const hour = parseInt(time / 3600);
-    let rSecond = parseInt(time % 3600);
-    const minute = parseInt(rSecond / 60);
-    rSecond = rSecond % 60;
-    return `${hour} hour ${minute} minute ago `
-}
-
-// load videos
-const loadVideos = (searchText = "") => {
-    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
-        .then((res) => res.json())
-        .then((data) => displayVideos(data.videos))
-        .catch((error) => console.log(error))
-};
 // displayVideos
 const displayVideos = (videos) => {
     const videoContainer = document.getElementById("videos")
@@ -132,6 +102,37 @@ const displayVideos = (videos) => {
     })
 }
 
+// time string setup
+function getTimeString(time) {
+    const hour = parseInt(time / 3600);
+    let rSecond = parseInt(time % 3600);
+    const minute = parseInt(rSecond / 60);
+    rSecond = rSecond % 60;
+    return `${hour} hour ${minute} minute ago `
+}
+
+// load details
+const loadDetails = async (videoId) => {
+    console.log(videoId);
+    const uri = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`
+    const res = await fetch(uri)
+    const data = await res.json()
+    displayDetails(data.video)
+}
+
+// display details
+const displayDetails = (video) => {
+console.log(video);
+    const detailContainer = document.getElementById("modal-content")
+
+    detailContainer.innerHTML = `
+        <img src=${video.thumbnail} />
+        <p class="pt-3">${video.description}</p>
+    `
+    document.getElementById("showModalData").click()
+}
+
+// search value 
 document.getElementById("search-input").addEventListener("keyup", (e) => {
     loadVideos(e.target.value);
 })
