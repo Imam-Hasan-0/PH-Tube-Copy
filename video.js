@@ -14,6 +14,27 @@ const removeActiveClass = () => {
     }
 }
 
+// load details
+const loadDetails = async (videoId) => {
+    console.log(videoId);
+    const uri = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`
+    const res = await fetch(uri)
+    const data = await res.json()
+    displayDetails(data.video)
+}
+
+// display details
+const displayDetails = (video) => {
+console.log(video);
+    const detailContainer = document.getElementById("modal-content")
+
+    detailContainer.innerHTML = `
+        <img src=${video.thumbnail} />
+        <p class="pt-3">${video.description}</p>
+    `
+    document.getElementById("showModalData").click()
+}
+
 // video category load
 const loadCategoriesVideos = (id) => {
     fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
@@ -57,8 +78,8 @@ function getTimeString(time) {
 }
 
 // load videos
-const loadVideos = () => {
-    fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
+const loadVideos = (searchText = "") => {
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
         .then((res) => res.json())
         .then((data) => displayVideos(data.videos))
         .catch((error) => console.log(error))
@@ -101,7 +122,7 @@ const displayVideos = (videos) => {
                 <p class="text-slate-400">${video.authors[0].profile_name}</p>
                 ${video.authors[0].verified == true ? `<img class="w-5" src="https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png" />` : ""}
             </div>
-            <p></p>
+            <p><button onclick="loadDetails('${video.video_id}')" class="btn btn-sm btn-error">Deatils</button></p>
           </div>
         </div>
         `
@@ -110,6 +131,10 @@ const displayVideos = (videos) => {
         videoContainer.append(card)
     })
 }
+
+document.getElementById("search-input").addEventListener("keyup", (e) => {
+    loadVideos(e.target.value);
+})
 
 loadCategories()
 loadVideos()

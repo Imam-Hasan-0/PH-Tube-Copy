@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header>
         <nav class="w-11/12 mx-auto flex justify-between py-3 items-center border-b">
@@ -16,7 +18,7 @@
                 <img src="assets/Logo.png" alt="">
             </div>
             <div class="search ">
-                <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+                <input id="search-input" type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
             </div>
             <div class="short">
                 <div class="btn">sort</div>
@@ -27,14 +29,30 @@
         <section id="categories" class="py-3 gap-3 flex justify-center">
 
         </section>
-        <section id="videos" class="w-11/12 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 py-10"></section>
+        <section id="videos" class="w-11/12 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 py-10">
+        </section>
 
         </section>
-        
+
     </main>
 
-    
+    <!-- Open the modal using ID.showModal() method -->
+    <button id="showModalData" class="btn hidden" onclick="customModal.showModal()">open modal</button>
+    <dialog id="customModal" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+            <div id="modal-content">
 
-<script src="video.js"></script>    
+            </div>
+            <div class="modal-action">
+                <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn">Close</button>
+                </form>
+            </div>
+        </div>
+    </dialog>
+
+    <script src="video.js"></script>
 </body>
+
 </html>
